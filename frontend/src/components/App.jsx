@@ -4,16 +4,23 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {
   BrowserRouter,Routes,Route,Navigate,
 } from "react-router-dom";
-import {Home} from "./Home";
-import {Login} from "./Login";
+import { useState } from 'react';
+import axios from "axios";
 
-function App() {
+import {Home} from "./Home";
+import {Callback, Login} from "./Login";
+
+
+function App(props) {
+  const [loggedIn, setLoggedIn] = useState(false)
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" 
-        element = {false ? <Home /> : <Navigate to="/login"/>}/>
-        <Route path="/login" element = {<Login/>} />
+        element = {loggedIn ? <Home /> : <Navigate to="/login"/>}/>
+        <Route path="/login" element = {<Login />} />
+        <Route path="/callback" element = {<Callback setLoggedIn={setLoggedIn}/>} />
       </Routes>
     </BrowserRouter>
   );
