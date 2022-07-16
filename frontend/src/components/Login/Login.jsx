@@ -1,0 +1,25 @@
+import React from "react";
+import Container from "react-bootstrap/Container";
+import Row from 'react-bootstrap/Row';
+
+
+export function Login() {
+    return(
+        <Container className="d-flex justify-content-around align-items-center flex-column" 
+        style={{"maxWidth": "80%", "marginTop": "5%"}}>
+        <Row>
+            <div>
+                <h1>Spotify Music Discovery &amp; Playlist Manager</h1>
+                <p className="text-justify">Hi! This is an app to quickly discover music and generate playlists using the Spotify
+                    Web API. Click the buttton below to login with your Spotify Account.
+                </p>
+            </div>
+        </Row>
+        <Row>
+            <a className="btn btn-success btn-lg" 
+            href="/gork">Login with Spotify</a>
+        </Row>
+        </Container>
+
+    )
+}
