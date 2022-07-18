@@ -12,7 +12,7 @@ export function Login(props) {
           response_type: 'code',
           client_id: "c0e9a860fcb745ba8d5f1057781404f0",
           scope: scope,
-          redirect_uri: "http://localhost:3000/callback",
+          redirect_uri: "http://localhost:3000/callback/",
           state: state
           }).toString();
         return 'https://accounts.spotify.com/authorize?' + params;

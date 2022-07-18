@@ -1,7 +1,7 @@
 
 
-export function Home() {
+export function Home(props) {
     return (
-        <div>gork</div>
+        <div>{props.accessToken}</div>
     )
 }

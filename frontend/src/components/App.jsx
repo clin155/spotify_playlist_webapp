@@ -5,22 +5,22 @@ import {
   BrowserRouter,Routes,Route,Navigate,
 } from "react-router-dom";
 import { useState } from 'react';
-import axios from "axios";
 
 import {Home} from "./Home";
-import {Callback, Login} from "./Login";
-
+import { Login, Callback} from "./Login";
 
 function App(props) {
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [accessToken, setAccessToken] = useState();
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" 
-        element = {loggedIn ? <Home /> : <Navigate to="/login"/>}/>
+        element = {loggedIn ? <Home accessToken={accessToken}/> : <Navigate to="/login"/>}/>
         <Route path="/login" element = {<Login />} />
-        <Route path="/callback" element = {<Callback setLoggedIn={setLoggedIn}/>} />
+        <Route path="/callback" element = {<Callback setLoggedIn={setLoggedIn}
+         setAccessToken={setAccessToken} />} />
       </Routes>
     </BrowserRouter>
   );
