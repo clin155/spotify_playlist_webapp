@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 import placeholder from "./../../static/images/placeholder.jpg";
 
-export function Playlist(props) {
+export function PlaylistRow(props) {
     const [ coverImg, setCoverImg ] = useState(placeholder);
 
     useEffect(() => {

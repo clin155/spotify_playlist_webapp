@@ -1,13 +1,13 @@
 import axios from "axios";
 
-import { Playlist } from "./Playlist"
+import { PlaylistRow } from "./PlaylistRow"
 import InfiniteScroll from 'react-infinite-scroller';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 function gork() {
     const params = new URLSearchParams({
-        limit: 5,
+        limit: 7,
         offset: 0,
     }).toString();
     return "https://api.spotify.com/v1/me/playlists?" + params;
@@ -29,8 +29,9 @@ export function Playlists(props) {
             .then(data => {
                 const items = data.data.items;
                 items.forEach(item => {
-                    setPlaylists(oldPlaylist => [...oldPlaylist, <Playlist data={item} />])
+                    setPlaylists(oldPlaylist => [...oldPlaylist, <PlaylistRow data={item} />])
                 })
+                console.log(items)
                 if (!data.data.next) {
                     setHasMore(false)
                 }
@@ -39,6 +40,10 @@ export function Playlists(props) {
                 }
             })
     }
+
+    useEffect(() => {
+        props.showPlaylist("0QNYYbCjMMzkON7mY53X7B")
+    }, [])
 
     return (
             <div className={`playlists ${props.className}`}>
