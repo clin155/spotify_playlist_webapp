@@ -1,0 +1,12 @@
+.flexor-container {
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+    justify-content: space-between;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.box {
+    width: 30%;
+}

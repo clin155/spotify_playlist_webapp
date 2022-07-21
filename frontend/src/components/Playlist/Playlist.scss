@@ -1,9 +1,17 @@
 .cover {
     width: 20%;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .playlists {
-    height:200px;
+    height:500px;
     overflow:auto;
+}
+
+.playlistrow {
+    display: flex;
+    flex-direction: row;
+    gap: 2%;
+    align-items: center;
+    background-color: rgb(211, 210, 210);
 }

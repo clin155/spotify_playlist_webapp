@@ -1,9 +1,8 @@
 import axios from "axios";
-import Container from 'react-bootstrap/Container';
 
 import { Playlist } from "./Playlist"
 import InfiniteScroll from 'react-infinite-scroller';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 function gork() {
@@ -41,13 +40,8 @@ export function Playlists(props) {
             })
     }
 
-    useEffect(() => {
-        fetchMore()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
     return (
-            <Container className="playlists">
+            <div className={`playlists ${props.className}`}>
                 <InfiniteScroll 
                     pageStart={0}
                     loadMore={fetchMore}
@@ -57,6 +51,6 @@ export function Playlists(props) {
                     >
                 {playlists}
                 </InfiniteScroll>
-            </Container>
+            </div>
     )
 }

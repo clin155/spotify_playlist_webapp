@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 // import axios from 'axios';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 
 import placeholder from "./../../static/images/placeholder.jpg";
 
@@ -16,9 +14,9 @@ export function Playlist(props) {
         }
     }, [props])
     return (
-        <Row>
-            <Col><img className="cover" src={coverImg} alt={"placeholder"}></img></Col>
-            <Col><p>{props.data.name}</p></Col>
-        </Row>
+        <div className="playlistrow">
+            <img className="cover" src={coverImg} alt={"placeholder"}></img>
+            <p>{props.data.name}</p>
+        </div>
     )
 }   
