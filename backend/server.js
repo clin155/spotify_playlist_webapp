@@ -7,11 +7,8 @@ const app = require('./config')();
 app.set('view engine', 'ejs');
 app.use(cors());
 app.use(bodyParser.json());
-// mongoose.connect('mongodb://localhost:27017/spotifymanager',
-//   {
-//     useNewUrlParser: true,
-//   }
-// );
+
+
 
 app.get('/', (req, res) => {
   res.render('index');

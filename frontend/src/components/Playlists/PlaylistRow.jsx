@@ -13,8 +13,9 @@ export function PlaylistRow(props) {
 
         }
     }, [props])
+
     return (
-        <div className="playlistrow">
+        <div className="playlistrow" onClick={() => props.showPlaylist(props.data.id)}>
             <img className="cover" src={coverImg} alt={"placeholder"}></img>
             <p>{props.data.name}</p>
         </div>

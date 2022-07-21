@@ -17,7 +17,7 @@ export function Home(props) {
         <div className="flexor-container">
             <Playlists className="box" token={props.accessToken} showPlaylist={showPlaylist}/>
             {openedPlaylist
-                ? <Playlist id={currPlaylistId}></Playlist>
+                ? <Playlist className="box" token={props.accessToken} id={currPlaylistId}></Playlist>
                 : <div className="box"></div>
             }
         </div>

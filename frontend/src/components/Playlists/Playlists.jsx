@@ -20,6 +20,7 @@ export function Playlists(props) {
     const [ hasMore, setHasMore ] = useState(true)
     const [ next, setNext ] = useState(() => gork())
 
+
     function fetchMore() {
         axios.get(next, {
             headers: {
@@ -29,9 +30,8 @@ export function Playlists(props) {
             .then(data => {
                 const items = data.data.items;
                 items.forEach(item => {
-                    setPlaylists(oldPlaylist => [...oldPlaylist, <PlaylistRow data={item} />])
+                    setPlaylists(oldPlaylist => [...oldPlaylist, <PlaylistRow showPlaylist={props.showPlaylist} data={item} />])
                 })
-                console.log(items)
                 if (!data.data.next) {
                     setHasMore(false)
                 }
@@ -41,9 +41,6 @@ export function Playlists(props) {
             })
     }
 
-    useEffect(() => {
-        props.showPlaylist("0QNYYbCjMMzkON7mY53X7B")
-    }, [])
 
     return (
             <div className={`playlists ${props.className}`}>

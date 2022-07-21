@@ -4,7 +4,7 @@
 }
 
 .playlists {
-    height:500px;
+    height:600px;
     overflow:auto;
 }
 
@@ -14,4 +14,8 @@
     gap: 2%;
     align-items: center;
     background-color: rgb(211, 210, 210);
+}
+
+.playlistrow2 {
+    @extend .playlistrow
 }
