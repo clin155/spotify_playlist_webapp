@@ -29,11 +29,25 @@ router.post('/', function(req, res) {
       })
       .then((response) => {
         emaill = response.data.email
-        const user = new User({
-          name: response.data.display_name,
-          email: response.data.email
+        let exists = true;
+        User.findOne({email: {$eq:emaill} }, function (err, docs) {
+          if (err){
+              throw err;
+          }
+          else{
+            exists = (docs !== null);
+          }
+        });
+        if (!exists) {
+          const user = new User({
+            name: response.data.display_name,
+            email: response.data.email
+          })
+          return user.save()
+        }
+        return new Promise((resolve, reject) => {
+          resolve({})
         })
-        return user.save()
       })
       .then((data) => {
         let session=req.session;

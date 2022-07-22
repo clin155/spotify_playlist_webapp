@@ -10,8 +10,8 @@ export function Login(props) {
         if (!props.loggedIn) {
           axios.get('http://localhost:8000/login/',{ withCredentials: true })
             .then((response) => {
+              console.log("gorked")
               if (response.data.loggedIn) {
-                console.log("gorked")
                 window.location = props.loginFunc()
               }
             })
