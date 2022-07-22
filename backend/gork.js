@@ -57,16 +57,16 @@ app.get('/', (req, res) => {
 })
 
 const loginRouter = require('./routes/login');
-app.use('api/login',loginRouter);
+app.use('/api/login/',loginRouter);
 
 const apiRouter = require('./routes/api');
-app.use('api', apiRouter);
+app.use('/api/', apiRouter);
 
 const userrRouter = require('./routes/user');
-app.use('api/user/',userrRouter);
+app.use('/api/user/',userrRouter);
 
-const playlistRouter = require('./routes/playlist');
-app.use('api/playlist/',playlistRouter);
+const playlistRouter = require('./routes/playlists');
+app.use('/api/playlist/',playlistRouter);
 
 
 http.createServer(app).listen(app.get('port'), function() {

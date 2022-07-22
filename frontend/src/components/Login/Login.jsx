@@ -8,7 +8,7 @@ export function Login(props) {
 
     useEffect(() => {
         if (!props.loggedIn) {
-          axios.get('http://localhost:8000/login/',{ withCredentials: true })
+          axios.get('http://localhost:8000/api/login/',{ withCredentials: true })
             .then((response) => {
               console.log("gorked")
               if (response.data.loggedIn) {

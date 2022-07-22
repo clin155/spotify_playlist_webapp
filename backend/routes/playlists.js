@@ -5,5 +5,7 @@ router.get('/', (req, res) => {
     let offset = req.query.offset || 0;
     let limit = req.query.limit || 20;
 
-    
+
 })
+
+module.exports = router;

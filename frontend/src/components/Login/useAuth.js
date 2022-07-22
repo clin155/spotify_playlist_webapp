@@ -16,7 +16,7 @@ export default function useAuth(code) {
             "Access-Control-Allow-Credentials": true
           }
         })
-        instance.post("http://localhost:8000/login", { code })
+        instance.post("http://localhost:8000/api/login", { code })
           .then((res) => {
             setAccessToken(res.data.accessToken)
             setRefreshToken(res.data.refreshToken)
