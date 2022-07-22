@@ -8,6 +8,14 @@ const playlistSchema = new mongoose.Schema({
     name: {
        type: String,
        required: true,
+    },
+    created: {
+        type: Date,
+        default: Date.now()
+    },
+    sequenceValue: {
+        type: Number,
+        required: true
     }
 
 })

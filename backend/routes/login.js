@@ -8,7 +8,6 @@ const User = require('../models/Users')
 
 
 router.post('/', function(req, res) {
-    console.log(JSON.stringify(req.headers));
     const code = req.body.code;
     const spotifyApi = new SpotifyWebApi({
       redirectUri: process.env.FRONTEND_URL + "/callback/",
@@ -83,6 +82,5 @@ router.get('/', function(req, res) {
     })
   }
 })
-
 
 module.exports = router

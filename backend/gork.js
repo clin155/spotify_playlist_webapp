@@ -57,7 +57,17 @@ app.get('/', (req, res) => {
 })
 
 const loginRouter = require('./routes/login');
-app.use('/login',loginRouter)
+app.use('api/login',loginRouter);
+
+const apiRouter = require('./routes/api');
+app.use('api', apiRouter);
+
+const userrRouter = require('./routes/user');
+app.use('api/user/',userrRouter);
+
+const playlistRouter = require('./routes/playlist');
+app.use('api/playlist/',playlistRouter);
+
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log("Express Server Running on port " + app.get('port'));
