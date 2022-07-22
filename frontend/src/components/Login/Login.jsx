@@ -1,9 +1,23 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from 'react-bootstrap/Row';
-
+import { useEffect } from "react";
+import axios from "axios";
 
 export function Login(props) {
+
+    useEffect(() => {
+        if (!props.loggedIn) {
+          axios.get('http://localhost:8000/login/',{ withCredentials: true })
+            .then((response) => {
+              if (response.data.loggedIn) {
+                console.log("gorked")
+                window.location = props.loginFunc()
+              }
+            })
+        }
+      }, [])
+      
     return(
         <Container className="d-flex justify-content-around align-items-center flex-column" 
         style={{"maxWidth": "80%", "marginTop": "5%"}}>

@@ -8,27 +8,17 @@ import { useState } from 'react';
 
 import {Home} from "./Home";
 import { Login, Callback} from "./Login";
-import axios from 'axios';
 
 function App(props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState();
-
-  if (!loggedIn) {
-    axios.get('http://localhost:8000/login/')
-      .then((data) => {
-        if (data.loggedIn) {
-          console.log("gorked")
-          window.location = loginUrl()
-        }
-      })
-  }
+  console.log(loggedIn);
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" 
         element = {loggedIn ? <Home accessToken={accessToken}/> : <Navigate to="/login"/>}/>
-        <Route path="/login" element = {loggedIn ? <Navigate to="/login"/> : <Login loginFunc={loginUrl}/>} />
+        <Route path="/login" element = {loggedIn ? <Navigate to="/" /> : <Login loginFunc={loginUrl}/>} />
         <Route path="/callback" element = {<Callback setLoggedIn={setLoggedIn}
          setAccessToken={setAccessToken} />} />
       </Routes>

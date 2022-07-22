@@ -1,5 +1,6 @@
 import { Playlists, Playlist } from "../Playlists"
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import axios from 'axios';
 
 export function Home(props) {
 
@@ -11,7 +12,6 @@ export function Home(props) {
         setopenedPlaylist(true)
         setCurrPlaylistId(id)
     }
-
 
     return (
         <div className="flexor-container">
