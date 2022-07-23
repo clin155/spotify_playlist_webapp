@@ -6,7 +6,6 @@ const User = require('../models/Users')
 
 
 
-
 router.post('/', function(req, res) {
     const code = req.body.code;
     const spotifyApi = new SpotifyWebApi({
@@ -28,8 +27,8 @@ router.post('/', function(req, res) {
       })
       .then((response) => {
         emaill = response.data.email
-        let exists = true;
-        User.findOne({email: {$eq:emaill} }, function (err, docs) {
+        let exists = false;
+        User.findOne( { email:emaill }, function (err, docs) {
           if (err){
               throw err;
           }

@@ -3,6 +3,7 @@ import axios from "axios";
 import { PlaylistRow } from "./PlaylistRow"
 import InfiniteScroll from 'react-infinite-scroller';
 import { useState, useEffect } from "react";
+import { Button } from "react-bootstrap";
 
 
 function gork() {
@@ -19,40 +20,83 @@ export function Playlists(props) {
     const [ playlists, setPlaylists ] = useState([])
     const [ hasMore, setHasMore ] = useState(true)
     const [ next, setNext ] = useState(() => gork())
+    const [ next2, setNext2 ] = useState(() => "http://localhost:8000/api/playlist/")
 
 
     function fetchMore() {
-        axios.get(next, {
-            headers: {
-                "Authorization": `Bearer ${props.token}`
-            }
-        })
-            .then(data => {
-                const items = data.data.items;
-                items.forEach(item => {
-                    setPlaylists(oldPlaylist => [...oldPlaylist, <PlaylistRow showPlaylist={props.showPlaylist} data={item} />])
+        if (next2 !== "" ) {
+            axios.get(next2, { withCredentials: true})
+                .then(res => {
+                    const { data } = res;
+                    setNext2(data.next)
+                    data.result.forEach((dat) => {
+                        setPlaylists(
+                            old => [...old, <PlaylistRow 
+                                showPlaylist={props.showPlaylist} 
+                                imgUrl={dat.imgUrl}
+                                name={dat.name}
+                                id={data._id}
+                                isSpotify={false}
+                            />])
+                    })
                 })
-                if (!data.data.next) {
-                    setHasMore(false)
-                }
-                else {
-                    setNext(data.data.next)
+        } 
+        else {
+            axios.get(next, {
+                headers: {
+                    "Authorization": `Bearer ${props.token}`
                 }
             })
+                .then(res => {
+                    const items = res.data.items;
+                    items.forEach(item => {
+                        let imgUrl = null
+                        if (item.images.length > 0) {
+                            imgUrl = item.images[0]["url"]
+                        }
+                        setPlaylists(oldPlaylist => [...oldPlaylist, <PlaylistRow 
+                            showPlaylist={props.showPlaylist} 
+                            imgUrl={imgUrl}
+                            name={item.name}
+                            id={item.id}
+                            isSpotify={true}
+                        />])
+                    })
+                    if (!res.data.next) {
+                        setHasMore(false)
+                    }
+                    else {
+                        setNext(res.data.next)
+                    }
+                })
+        }
+
     }
 
+    function newPlayList() {
+        // axios.get('http://localhost:8000/api/login/',{ withCredentials: true })
+        const instance = axios.create({
+            withCredentials: true
+        })
+        instance.post("http://localhost:8000/api/playlist/")
+    }
 
     return (
-            <div className={`playlists ${props.className}`}>
-                <InfiniteScroll 
-                    pageStart={0}
-                    loadMore={fetchMore}
-                    hasMore={hasMore}
-                    loader={<h4>Loading...</h4>}
-                    useWindow={false}
-                    >
-                {playlists}
-                </InfiniteScroll>
+            <div className={props.className}>
+                <Button onClick={newPlayList} className="btn btn-success btn-lg">
+                    Create Empty Playlist
+                </Button>
+                <div className={`playlists`}>
+                    <InfiniteScroll
+                        pageStart={0}
+                        loadMore={fetchMore}
+                        hasMore={hasMore}
+                        loader={<h4>Loading...</h4>}
+                        useWindow={false}
+                        >
+                    {playlists}
+                    </InfiniteScroll>
+                </div>
             </div>
     )
 }

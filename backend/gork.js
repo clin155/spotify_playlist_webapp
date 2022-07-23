@@ -68,6 +68,8 @@ app.use('/api/user/',userrRouter);
 const playlistRouter = require('./routes/playlists');
 app.use('/api/playlist/',playlistRouter);
 
+const songBankRouter = require('./routes/songbank');
+app.use('/api/bank/', songBankRouter);
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log("Express Server Running on port " + app.get('port'));

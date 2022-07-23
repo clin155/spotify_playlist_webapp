@@ -20,7 +20,7 @@
   "scripts": {
     "debug": "nodemon --inspect gork.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon gork.js"
   },
   "keywords": [],
   "author": "",

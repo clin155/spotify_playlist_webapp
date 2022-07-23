@@ -4,20 +4,30 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {
   BrowserRouter,Routes,Route,Navigate,
 } from "react-router-dom";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import {Home} from "./Home";
 import { Login, Callback} from "./Login";
+import SpotifyWebApi from "spotify-web-api-node";
+
+const spotifyApi = new SpotifyWebApi({
+  clientId: "c0e9a860fcb745ba8d5f1057781404f0",
+})
 
 function App(props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState();
-  console.log(loggedIn);
+  
+  useEffect(() => {
+    if (!accessToken) return
+    spotifyApi.setAccessToken(accessToken)
+  }, [accessToken])
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" 
-        element = {loggedIn ? <Home accessToken={accessToken}/> : <Navigate to="/login"/>}/>
+        element = {loggedIn ? <Home accessToken={accessToken} spotifyApi={spotifyApi}/> : <Navigate to="/login"/>}/>
         <Route path="/login" element = {loggedIn ? <Navigate to="/" /> : <Login loginFunc={loginUrl}/>} />
         <Route path="/callback" element = {<Callback setLoggedIn={setLoggedIn}
          setAccessToken={setAccessToken} />} />

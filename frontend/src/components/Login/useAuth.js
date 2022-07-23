@@ -12,9 +12,6 @@ export default function useAuth(code) {
       if (code) {
         const instance = axios.create({
           withCredentials: true,
-          headers: {
-            "Access-Control-Allow-Credentials": true
-          }
         })
         instance.post("http://localhost:8000/api/login", { code })
           .then((res) => {

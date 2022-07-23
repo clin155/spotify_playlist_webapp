@@ -1,0 +1,7 @@
+.cover {
+    width: 70px;
+    object-fit: cover;
+}
+.playlistrow2 {
+    @extend .playlistrow
+}

@@ -16,6 +16,20 @@ const playlistSchema = new mongoose.Schema({
     sequenceValue: {
         type: Number,
         required: true
+    },
+    tracks: {
+        type: [
+            {
+                artist: String,
+                title: String,
+                albumUrl: String,
+            }
+        ],
+        default: []
+    },
+    imgUrl: {
+        type: String,
+        default: null
     }
 
 })
