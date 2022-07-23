@@ -59,6 +59,8 @@ export function SearchBar(props) {
                 artist={track.artist}
                 title={track.title}
                 albumUrl={track.albumUrl}
+                playlistId={props.playlistId}
+                setTracksWrapper={props.setTracksWrapper}
                 />
             ))}
         </div>

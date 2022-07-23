@@ -1,4 +1,5 @@
 import axios from "axios";
+import uuid from 'react-uuid';
 
 import { PlaylistRow } from "./PlaylistRow"
 import InfiniteScroll from 'react-infinite-scroller';
@@ -22,7 +23,6 @@ export function Playlists(props) {
     const [ next, setNext ] = useState(() => gork())
     const [ next2, setNext2 ] = useState(() => "http://localhost:8000/api/playlist/")
 
-
     function fetchMore() {
         if (next2 !== "" ) {
             axios.get(next2, { withCredentials: true})
@@ -35,10 +35,12 @@ export function Playlists(props) {
                                 showPlaylist={props.showPlaylist} 
                                 imgUrl={dat.imgUrl}
                                 name={dat.name}
-                                id={data._id}
+                                id={dat._id}
                                 isSpotify={false}
+                                key={uuid()}
                             />])
                     })
+
                 })
         } 
         else {
@@ -49,7 +51,7 @@ export function Playlists(props) {
             })
                 .then(res => {
                     const items = res.data.items;
-                    items.forEach(item => {
+                    items.forEach((item, ind) => {
                         let imgUrl = null
                         if (item.images.length > 0) {
                             imgUrl = item.images[0]["url"]
@@ -60,6 +62,7 @@ export function Playlists(props) {
                             name={item.name}
                             id={item.id}
                             isSpotify={true}
+                            key={uuid()}
                         />])
                     })
                     if (!res.data.next) {
@@ -73,12 +76,28 @@ export function Playlists(props) {
 
     }
 
-    function newPlayList() {
+    async function newPlayList() {
         // axios.get('http://localhost:8000/api/login/',{ withCredentials: true })
         const instance = axios.create({
             withCredentials: true
         })
-        instance.post("http://localhost:8000/api/playlist/")
+        const res = await instance.put("http://localhost:8000/api/playlist/");
+        if (res.status === 201) {
+            const { data: { playlist } } = res;
+            setPlaylists(oldPlaylist => [<PlaylistRow 
+                showPlaylist={props.showPlaylist} 
+                imgUrl={playlist.imgUrl}
+                name={playlist.name}
+                id={playlist._id}
+                isSpotify={false}
+                key={uuid()}/>, ...oldPlaylist]
+            )
+            // setPlaylists([])
+            // setHasMore(true)
+            // setNext(gork())
+            // setNext2("http://localhost:8000/api/playlist/")
+        }
+        
     }
 
     return (
@@ -91,7 +110,7 @@ export function Playlists(props) {
                         pageStart={0}
                         loadMore={fetchMore}
                         hasMore={hasMore}
-                        loader={<h4>Loading...</h4>}
+                        loader={<h4 key={uuid()}>Loading...</h4>}
                         useWindow={false}
                         >
                     {playlists}

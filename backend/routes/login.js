@@ -6,7 +6,7 @@ const User = require('../models/Users')
 
 
 
-router.post('/', function(req, res) {
+router.post('/', async function(req, res) {
     const code = req.body.code;
     const spotifyApi = new SpotifyWebApi({
       redirectUri: process.env.FRONTEND_URL + "/callback/",
@@ -14,58 +14,52 @@ router.post('/', function(req, res) {
       clientId: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
     })
-    let tokenData = undefined
-    let emaill = undefined
-    spotifyApi
-      .authorizationCodeGrant(code)
-      .then((data) => {
-        tokenData = data
-        return axios.get("https://api.spotify.com/v1/me",
-        {
-          headers: { 'Authorization': `Bearer ${data.body.access_token}` }
-        })
+    if (req.session.userid) {
+      const tokenData = await spotifyApi.authorizationCodeGrant(code)
+      res.json({
+        accessToken: tokenData.body.access_token,
+        refreshToken: tokenData.body.refresh_token,
+        expiresIn: tokenData.body.expires_in,
+        user: req.session.userid
       })
-      .then((response) => {
-        emaill = response.data.email
-        let exists = false;
-        User.findOne( { email:emaill }, function (err, docs) {
-          if (err){
-              throw err;
-          }
-          else{
-            exists = (docs !== null);
-          }
-        });
-        if (!exists) {
-          const user = new User({
-            name: response.data.display_name,
-            email: response.data.email
-          })
-          return user.save()
-        }
-        return new Promise((resolve, reject) => {
-          resolve({})
-        })
+      return;
+    }
+    try {
+      const tokenData = await spotifyApi.authorizationCodeGrant(code)
+      const response = await axios.get("https://api.spotify.com/v1/me",
+      {
+        headers: { 'Authorization': `Bearer ${tokenData.body.access_token}` }
       })
-      .then((data) => {
-        let session=req.session;
-        session.userid=emaill;
-        res.json({
-          accessToken: tokenData.body.access_token,
-          refreshToken: tokenData.body.refresh_token,
-          expiresIn: tokenData.body.expires_in,
-          user: data
+      const emaill = response.data.email
+      const docs = await User.findOne( { email:emaill } )
+      let data = {}
+      if (docs == null) {
+        const user = new User({
+          name: response.data.display_name,
+          email: response.data.email
         })
-      }) 
-      .catch(err => {
-        console.log(err)
-        if (err.message) {
-          res.status(500).json({error: err.message})
-        }
-        else {
-          res.status(400).json(err)
-        }
+        data = await user.save()
+
+      }
+      let session=req.session;
+      session.userid=emaill;
+      res.json({
+        accessToken: tokenData.body.access_token,
+        refreshToken: tokenData.body.refresh_token,
+        expiresIn: tokenData.body.expires_in,
+        user: data
       })
+    }
+    catch(err) {
+      console.log(err)
+      if (err.message) {
+        res.status(500).json({error: err.message})
+      }
+      else {
+        res.status(400).json(err)
+      }
+    }
+
 });
 
 router.get('/', function(req, res) {

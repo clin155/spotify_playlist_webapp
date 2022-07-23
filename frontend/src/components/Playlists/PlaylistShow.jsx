@@ -1,5 +1,5 @@
-import { Song } from '../Song';
 import axios from 'axios';
+import uuid from 'react-uuid';
 
 import InfiniteScroll from 'react-infinite-scroller';
 import { useEffect, useState } from 'react';
@@ -14,19 +14,20 @@ function gork(id, isSpotify) {
 
         return `https://api.spotify.com/v1/playlists/${id}/tracks?` + params;
     }
-    return "http://localhost:8080/api/playlists/"
+    return `http://localhost:8000/api/playlist/${id}/tracks/`
 }
 
 export function Playlist(props) {
-    const { id, isSpotify } = props;
-    const [ tracks, setTracks ] = useState([]);
+    const { id, isSpotify, token, tracks, setTracksWrapper, resetTracks } = props;
     const [ name, setName ] = useState();
     const [ owner, setOwner ] = useState();
     const [ next, setNext ] = useState(() => gork(id, isSpotify))
-    const [ hasMore, setHasMore ] = useState(true)
+    const [ hasMore, setHasMore ] = useState(false)
+    
 
     async function addTracks() {
-        if (isSpotify) {      
+        if (isSpotify) { 
+     
             let res = null
             try {
                 res = await axios.get(next, {
@@ -45,29 +46,33 @@ export function Playlist(props) {
                     const { track: trac } = track;
                     const artist = trac.album.artists[0].name;
 
-                    setTracks((prevTracks) => [...prevTracks, <Song
-                        artist={artist} 
-                        albumUrl={trac.album.images[0]["url"]}
-                        title={trac.name}
-                        />]
-                    )
+                    setTracksWrapper(trac.name, artist, trac.album.images[0]["url"], id)
                 }
                 catch(err) {
                     console.log(track, err)
                 }
 
             })
+            setNext(res.data.next)
             if (!res.data.next) {
                 setHasMore(false)
             }
-            else {
-                setNext(res.data.next)
-            }
         }
         else {
-            try {
+            try {             
                 const res = await axios.get(next, { withCredentials: true});
-
+                const { next:nextRes, result, owner, name } = res.data;
+                setNext(nextRes)
+                setOwner(owner)
+                setName(name)
+                if (nextRes === "") {
+                    setHasMore(false)
+                }
+                result.forEach(track => {
+                    if (track.artist != null) {
+                        setTracksWrapper(track.title, track.artist, track.albumUrl, id)
+                    }
+                })
 
             } catch(err) {
                 console.log(err);
@@ -75,21 +80,33 @@ export function Playlist(props) {
         }
     }
 
-    useEffect(() => {
-        axios.get(`https://api.spotify.com/v1/playlists/${props.id}`, {
-            headers: {
-                "Authorization": `Bearer ${props.token}`
-            }
-        })
-            .then((data) => {
-                setName(data.data.name)
-                setOwner(data.data.owner.display_name)
-                setHasMore(true)
-                setNext(() => gork(props.id))
-                setTracks([])
-            })
+    // useEffect(() => {
+    //     console.log("e");
+    //     setName((prevName) => prevName)
+    // }, [JSON.stringify(tracks)])
 
-    }, [props.id])
+    useEffect(() => {
+        if (isSpotify) {
+            axios.get(`https://api.spotify.com/v1/playlists/${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then((data) => {
+                    setName(data.data.name)
+                    setOwner(data.data.owner.display_name)
+                    setHasMore(true)
+                    setNext(() => gork(id, isSpotify))
+                    resetTracks()
+                })
+        }
+        else {
+            setHasMore(true);
+            setNext(() => gork(id, isSpotify));
+            resetTracks()
+        }
+
+    }, [id, isSpotify, token])
     return (
         <div className={props.className}>
             <p>{name}</p>
@@ -99,7 +116,7 @@ export function Playlist(props) {
                     pageStart={0}
                     loadMore={addTracks}
                     hasMore={hasMore}
-                    loader={<h4>Loading...</h4>}
+                    loader={<h4 key={uuid()}>Loading...</h4>}
                     useWindow={false}
                     >
                 {tracks}

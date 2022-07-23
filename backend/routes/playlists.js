@@ -1,9 +1,13 @@
+//api/login
 const express = require('express');
 const router = express.Router();
 
 const Playlist = require('../models/Playlists')
-const Counter = require('../models/Counter')
+const Counter = require('../models/Counter');
+const User = require('../models/Users');
+const { response } = require('express');
 
+//get paginate
 router.get('/', async (req, res) => {
     const user = req.session.userid;
 
@@ -14,7 +18,7 @@ router.get('/', async (req, res) => {
     let offset = req.query.offset || 0;
     let limit = req.query.limit || 20;
     const docs = await Playlist.find({ owner: req.session.userid }).sort( 
-        { sequenceValue : 1 }).skip(offset).limit(limit)
+        { sequenceValue : -1 }).skip(offset).limit(limit)
     const params = new URLSearchParams({
         offset: offset + limit,
         limit: limit
@@ -25,6 +29,7 @@ router.get('/', async (req, res) => {
     }).status(200)
 })
 
+//create a new playlist
 router.put('/', async (req, res) => {
     const user = req.session.userid;
     const tracks = req.body.tracks
@@ -39,9 +44,9 @@ router.put('/', async (req, res) => {
             dbName: "Playlists"
         })
         await counter.save();
-        const playlist = await postHelper(0, user, tracks)
+        const playlist = await putHelper(0, user, tracks)
         res.status(201).json({
-            id: playlist._id,
+            playlist: playlist,
             "created": true
         })
         
@@ -49,16 +54,106 @@ router.put('/', async (req, res) => {
     }
     else {
         await Counter.updateOne({ dbName: "Playlists" }, { $inc: { sequenceValue: 1}})
-        const playlist = await postHelper(docs.sequenceValue+1, user, tracks)
+        const playlist = await putHelper(docs.sequenceValue+1, user, tracks)
         res.status(201).json({
-            id: playlist._id,
-            "created": true
+            playlist: playlist,
+            "created": false
         })
     }
 
 })
 
-postHelper = async (sequenceNum, user, tracks) => {
+//updateExistingPlaylist
+router.post('/:id/', async (req, res) => {
+    console.log("PEE")
+    const id = req.params.id;
+    const user = req.session.userid;
+    const tracks = req.body.tracks
+    if (!req.session.userid) {
+        res.sendStatus(403);
+        return;
+    }
+    const docs = await Playlist.findOne({ _id: id })
+    if (docs == null ) {
+        res.status(404).json({
+            error: "id does not exist"
+        });
+        return;
+    }
+    if ( docs.owner !== user ) {
+        res.status(403).json({
+            error: "wrong user"
+        })
+        return;
+    }
+    const newTracks = [...docs.tracks, ...tracks]
+    await Playlist.updateOne({ _id: id }, { tracks: newTracks})
+
+    res.status(201).json({
+        tracks: newTracks,
+        created: true
+    })
+})
+
+//get singular playlist
+router.get('/:id/', async (req, res) =>{
+    const id = req.params.id;
+    const user = req.session.userid;
+    if (!req.session.userid) {
+        res.sendStatus(403);
+        return;
+    }
+    const docs = await Playlist.findOne({ _id: id })
+    if (docs == null ) {
+        res.status(404).json({
+            error: "id does not exist"
+        });
+        return;
+    }
+    if ( docs.owner !== user ) {
+        res.status(403).json({
+            error: "wrong user"
+        })
+        return;
+    }
+    res.json(docs)
+})
+//get tracks
+router.get('/:id/tracks/', async (req, res) =>{
+    console.log("GORKED");
+    const id = req.params.id;
+
+    let offset = req.query.offset || 0;
+    let limit = req.query.limit || 100;
+    if (!req.session.userid) {
+        res.sendStatus(403);
+        return;
+    }
+    const docs = await Playlist.findOne({_id: id});
+    if (docs == null) {
+        res.status(404).json({
+            error: "id does not exist"
+        });
+        return;
+    }
+    const { tracks } = docs;
+    const newTracks = tracks.slice(offset, offset+limit)
+    const params = new URLSearchParams({
+        offset: offset + limit,
+        limit: limit
+    })
+    const docs2 = await User.findOne( { email: docs.owner })
+
+    res.json({
+        next: offset+limit < tracks.length ? "http://localhost:8000/api/${id}/newTracks/?" + params : "",
+        result: newTracks,
+        owner: docs2.name,
+        name: docs.name
+    })
+
+})
+
+putHelper = async (sequenceNum, user, tracks) => {
     const playlist = new Playlist({
         owner: user,
         name: "My Playlist " + sequenceNum.toString(),
@@ -67,6 +162,7 @@ postHelper = async (sequenceNum, user, tracks) => {
     })
     return playlist.save();
 }
+
 
 
 
