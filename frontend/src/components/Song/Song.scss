@@ -1,0 +1,45 @@
+.cover {
+    width: 70px;
+    object-fit: cover;
+}
+.playlistrow2 {
+    @extend .playlistrow;
+    justify-content: space-between;
+}
+
+.songText {
+    margin: 0px;
+    font-size: 0.8rem;
+    // white-space: nowrap;
+
+}
+
+.textHolder {
+    display: block;
+}
+
+.songIcon {
+    margin-left: 10%;
+}
+
+.songIcon2 {
+    transform: scale(1.5);
+}
+
+.part1 {
+    display: flex;
+    align-items: center;
+    gap: 4%
+}
+
+.part2 {
+    display: flex; 
+    align-items: center;
+    margin-right: 4%;
+    gap: 40px;
+
+}
+
+.delete {
+    color: $deleteColor;
+}

@@ -1,0 +1,16 @@
+.searchResults {
+    height:600px;
+    overflow:auto;    
+    
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    & { animation: fadeIn 1s; }
+}
+
+.gorkers {
+    width: 20%;
+    margin-bottom: 2%;
+    margin-top: 5%;
+}

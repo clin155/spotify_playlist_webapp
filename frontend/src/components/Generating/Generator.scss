@@ -1,0 +1,23 @@
+.generator {
+    padding: 5%;
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    & { animation: fadeIn 1s; }
+}
+
+.before {
+    display: flex;
+    flex-direction: column;
+}
+
+.goBack {
+    width: fit-content;
+    margin-bottom: 3%;
+}
+
+.fieldd {
+    width: 40%;
+    margin-bottom: 3% !important;
+}

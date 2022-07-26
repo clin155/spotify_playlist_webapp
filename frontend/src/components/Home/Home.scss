@@ -1,0 +1,63 @@
+.flexor-container {
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+    justify-content: space-between;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.box {
+    width: 40%;
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    & { animation: fadeIn 1s; }
+}
+
+.player {
+    position: fixed;
+    bottom:-10px;
+    z-index: 2;
+    width: fill;
+    background-color: white;
+}
+.home {
+    margin-bottom: 100px;
+}
+.title {
+    text-align: center;
+    font-size: xxx-large;
+    padding-bottom: 1%;
+    margin-top: 2%;
+    width: 100vw;
+    border-bottom: 2px solid black;
+    margin-bottom: 0px;
+}
+
+.header {
+    display: grid;
+    grid-template: 1fr;  
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.header > * {
+    grid-area: area1;
+    text-align: center;
+}
+
+.bank {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 5%;
+    gap: 3%
+}
+
+.editBank {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 5%;
+}

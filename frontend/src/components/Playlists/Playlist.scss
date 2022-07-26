@@ -1,0 +1,41 @@
+
+.playlists {
+    height:600px;
+    overflow:auto;
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    & { animation: fadeIn 1s; }
+}
+
+.playlistrow {
+    display: flex;
+    flex-direction: row;
+    gap: 2%;
+    align-items: center;
+    width: 100%;
+    background-color: rgb(211, 210, 210);
+}
+
+.spotifySvg {
+    width: 20px;
+    height: auto;
+    object-fit: cover;
+    right: 0px;
+}
+.ye {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2%;
+}
+
+.rowName {
+    margin-bottom: 0px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2%;
+}
