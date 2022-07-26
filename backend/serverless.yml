@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: RestApi
+service: httpApi
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
 #org: your-org-name
@@ -25,8 +25,31 @@ provider:
   runtime: nodejs12.x
   memorySize: 2048
   stage: dev
-  timeout: 60
+  timeout: 20
   region: us-west-1
+  httpApi:
+    cors:
+      allowedOrigins:
+        - https://clin155.github.io/spotify_playlist_webapp/
+      allowedMethods:
+        - POST
+        - GET
+        - DELETE
+        - PUT
+        - HEAD
+      allowedHeaders:
+        - Content-Type
+        - X-Amz-Date
+        - Authorization
+        - X-Api-Key
+        - X-Amz-Security-Token
+        - X-Amz-User-Agent
+        - X-Transaction-Key
+        - Access-Control-Allow-Origin
+        - Access-Control-Allow-Credentials
+        - Access-Control-Expose-Headers
+        - Set-Cookie
+      allowCredentials: true
 
 # you can overwrite defaults here
 #  stage: dev
@@ -68,6 +91,7 @@ functions:
     events:
       - http: ANY /{proxy+}
       - http: ANY /
+
     environment:
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
