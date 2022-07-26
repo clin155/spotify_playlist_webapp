@@ -24,12 +24,12 @@ function App(props) {
   }, [accessToken])
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
-        <Route path="/" 
+        <Route exact path="/" 
         element = {loggedIn ? <Home accessToken={accessToken} spotifyApi={spotifyApi}/> : <Navigate to="/login"/>}/>
-        <Route path="/login" element = {loggedIn ? <Navigate to="/" /> : <Login loginFunc={loginUrl}/>} />
-        <Route path="/callback" element = {<Callback setLoggedIn={setLoggedIn}
+        <Route exact path="/login" element = {loggedIn ? <Navigate to="/" /> : <Login loginFunc={loginUrl}/>} />
+        <Route exact path="/callback" element = {<Callback setLoggedIn={setLoggedIn}
          setAccessToken={setAccessToken} />} />
       </Routes>
     </BrowserRouter>
