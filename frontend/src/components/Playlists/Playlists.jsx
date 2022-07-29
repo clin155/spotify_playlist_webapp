@@ -8,7 +8,7 @@ import { Button } from "react-bootstrap";
 
 function gork() {
     const params = new URLSearchParams({
-        limit: 7,
+        limit: 15,
         offset: 0,
     }).toString();
     return "https://api.spotify.com/v1/me/playlists?" + params;
