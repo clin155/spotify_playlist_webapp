@@ -37,6 +37,19 @@ provider:
         - DELETE
         - PUT
         - HEAD
+      allowedHeaders:
+        - Content-Type
+        - X-Amz-Date
+        - Authorization
+        - X-Api-Key
+        - X-Amz-Security-Token
+        - X-Amz-User-Agent
+        - X-Transaction-Key
+        - Access-Control-Allow-Origin
+        - Access-Control-Allow-Credentials
+        - Access-Control-Expose-Headers
+        - Set-Cookie
+        - Cookie
       allowCredentials: true
 
 # you can overwrite defaults here
