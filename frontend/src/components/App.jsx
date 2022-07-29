@@ -2,8 +2,10 @@ import './Global.scss';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import {
-  BrowserRouter,Routes,Route,Navigate,
+  Routes,Route,Navigate,
 } from "react-router-dom";
+// import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
 import {Home} from "./Home";
@@ -24,12 +26,12 @@ function App(props) {
   }, [accessToken])
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
-        <Route path="/" 
+        <Route exact path="/" 
         element = {loggedIn ? <Home accessToken={accessToken} spotifyApi={spotifyApi}/> : <Navigate to="/login"/>}/>
-        <Route path="/login" element = {loggedIn ? <Navigate to="/" /> : <Login loginFunc={loginUrl}/>} />
-        <Route path="/callback" element = {<Callback setLoggedIn={setLoggedIn}
+        <Route exact path="/login" element = {loggedIn ? <Navigate to="/" /> : <Login loginFunc={loginUrl}/>} />
+        <Route exact path="/callback" element = {<Callback setLoggedIn={setLoggedIn}
          setAccessToken={setAccessToken} />} />
       </Routes>
     </BrowserRouter>
