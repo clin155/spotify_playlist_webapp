@@ -57,7 +57,10 @@ router.post('/', async function(req, res) {
     catch(err) {
       console.log(err)
       if (err.message) {
-        res.status(500).json({error: err.message})
+        res.status(500).json(
+          {error: err.message,
+            redirectUri: process.env.FRONTEND_URL + "/callback/"
+          })
       }
       else {
         res.status(400).json(err)

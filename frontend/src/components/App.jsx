@@ -2,8 +2,10 @@ import './Global.scss';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import {
-  BrowserRouter,Routes,Route,Navigate,
+  Routes,Route,Navigate,
 } from "react-router-dom";
+// import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
 import {Home} from "./Home";

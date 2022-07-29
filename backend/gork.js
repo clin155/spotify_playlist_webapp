@@ -13,8 +13,7 @@ const corsOptions = {
   exposedHeaders: ["Access-Control-Expose-Headers", "Access-Control-Allow-Headers", 
   "Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", 
   "Set-Cookie"],
-  preflightContinue: true,
-  origin: process.env.FRONTEND_URL,
+  origin: process.env.FRONTEND_ORIGIN,
   credentials: true,
   methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"],
 }

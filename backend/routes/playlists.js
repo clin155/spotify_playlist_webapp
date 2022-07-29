@@ -8,12 +8,14 @@ const User = require('../models/Users');
 
 //get paginate
 router.get('/', async (req, res) => {
-    const user = req.session.userid;
 
-    if (!req.session.userid) {
-        res.sendStatus(403);
-        return;
-    }
+    // const user = req.session.userid; 
+    const user = "clin7985@gmail.com"
+
+    // if (!req.session.userid) {
+    //     res.sendStatus(403);
+    //     return;
+    // }
     let offset = req.query.offset || 0;
     let limit = req.query.limit || 20;
     const docs = await Playlist.find({ owner: req.session.userid }).sort( 
@@ -22,10 +24,13 @@ router.get('/', async (req, res) => {
         offset: offset + limit,
         limit: limit
     }).toString()
-    res.json({
+    // result: docs,
+
+    res.status(200).json({
+        user: user,
         result: docs,
         next: docs.length >= limit ? process.env.HOST_URL + '/api/playlist/?' + params : ""
-    }).status(200)
+    })
 })
 
 //create a new playlist

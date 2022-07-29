@@ -20,12 +20,16 @@ export function Playlists(props) {
     const [ playlists, setPlaylists ] = useState([])
     const [ hasMore, setHasMore ] = useState(true)
     const [ next, setNext ] = useState(() => gork())
-    const [ next2, setNext2 ] = useState(() => `${process.env.REACT_APP_BACKEND_URL}/api/playlist/`)
+    const [ next2, setNext2 ] = useState(`${process.env.REACT_APP_BACKEND_URL}/api/playlist/`)
 
     function fetchMore() {
         if (next2 !== "" ) {
             axios.get(next2, { withCredentials: true})
                 .then(res => {
+                    if (res.data === "") {
+                        window.location.reload();
+                        return
+                    }
                     const { data } = res;
                     setNext2(data.next)
                     data.result.forEach((dat) => {
